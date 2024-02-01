@@ -9,7 +9,8 @@ namespace FinalTask
 {
     internal class ProgramUtils
     {
-        public static readonly ILog _log = LogManager.GetLogger(typeof(Program));
+
+        public static readonly ILog _log = LogManager.GetLogger(typeof(Program));        
 
         internal static void WriteRes1(List<Doctor> doctors)
         {

@@ -11,7 +11,7 @@ namespace FinalTask
         public Pediatrician() : base()
         {
             PatientsCount = 49;
-        }
+        }   
 
         public Pediatrician(string name, string surname, int age, Gender gender, int workExp, double salary, int patientsCount) : base(name, surname, age, gender, workExp, salary)
         {
@@ -48,7 +48,7 @@ namespace FinalTask
 
         public override bool Equals(object? o)
         {
-            var item = o as Pediatrician;
+            Pediatrician? item = o as Pediatrician;
             if (base.Equals(item) && PatientsCount == item.PatientsCount)
             {
                 return true;

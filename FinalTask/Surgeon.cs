@@ -47,7 +47,7 @@ namespace FinalTask
 
         public override bool Equals(object? o)
         {
-            var item = o as Surgeon;
+            Surgeon? item = o as Surgeon;
             if (base.Equals(item) && OperationsCount == item.OperationsCount)
             {
                 return true;

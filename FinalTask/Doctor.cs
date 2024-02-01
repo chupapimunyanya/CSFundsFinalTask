@@ -64,7 +64,7 @@ namespace FinalTask
                 }
                 else
                 {
-                    foreach (var line in lines)
+                    foreach (string line in lines)
                     {
                         lineNum++;
                         try
@@ -168,7 +168,7 @@ namespace FinalTask
             }
             using (StreamWriter sw = new(path))
             {
-                foreach (var d in doctors)
+                foreach (Doctor d in doctors)
                 {
                     sw.WriteLine(d.ToString());
                 }
@@ -183,7 +183,7 @@ namespace FinalTask
                 throw new ArgumentException($"Wrong file type is given as argument in Doctor.WriteToJsonFile(arg1, arg2).");
             }
             string jsonstring = "";
-            foreach (var d in doctors)
+            foreach (Doctor d in doctors)
             {
                 jsonstring += d.WriteToJson() + "\n";
             }
@@ -229,7 +229,7 @@ namespace FinalTask
 
         public override bool Equals(object? o)
         {
-            var item = o as Doctor;
+            Doctor? item = o as Doctor;
             if (base.Equals(item) && WorkExp == item.WorkExp && Salary == item.Salary)
             {
                 return true;

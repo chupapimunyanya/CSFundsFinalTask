@@ -28,7 +28,7 @@
 
         public virtual new bool Equals(object? o)
         {
-            var item = o as Person;
+            Person? item = o as Person;
             if (item!=null && Name.Equals(item.Name) && Surname.Equals(item.Surname) && Age == item.Age && Gender == item.Gender)
             {
                 return true;
