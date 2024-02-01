@@ -51,11 +51,13 @@ namespace FinalTask
                             }
                             catch (FormatException ex)
                             {
-                                Console.WriteLine(ex.Message);
+                                Console.WriteLine($"Format exception in .xml file: {ex.Message}");
+                                ProgramUtils._log.Info(ex.Message);
                             }
                             catch (Exception ex)
                             {
                                 Console.WriteLine(ex.Message);
+                                ProgramUtils._log.Info(ex.Message);
                             }
                         }
                     }
@@ -84,17 +86,17 @@ namespace FinalTask
                         catch (JsonException ex)
                         {
                             Console.WriteLine($"Format exception in .json file on line {ex.LineNumber + 1}: {ex.InnerException.Message}");
-                            Program._log.Info(ex.Message);
+                            ProgramUtils._log.Info(ex.Message);
                         }
                         catch (FormatException ex)
                         {
                             Console.WriteLine($"Format exception on line {lineNum}: {ex.Message}");
-                            Program._log.Info($"Format exception on line {lineNum}: {ex.Message}");
+                            ProgramUtils._log.Info($"Format exception in .txt file on line {lineNum}: {ex.Message}");
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message);
-                            Program._log.Info(ex.Message);
+                            ProgramUtils._log.Info(ex.Message);
                         }
                     }
                 }
@@ -107,7 +109,7 @@ namespace FinalTask
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Program._log.Info(ex.Message);
+                ProgramUtils._log.Info(ex.Message);
             }
             return doctors;
         }
