@@ -1,10 +1,13 @@
 ﻿namespace FinalTask
 {
-    public abstract class Person
+    public class Person
     {
         public string Name { get; set; }
+
         public string Surname { get; set; }
+
         public int Age { get; }
+
         public Gender Gender { get; }
 
         public Person()

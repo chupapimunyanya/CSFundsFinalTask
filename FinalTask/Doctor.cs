@@ -9,7 +9,8 @@ namespace FinalTask
     [XmlInclude(typeof(Pediatrician))]
     public class Doctor : Person
     {
-        public int WorkExp { get; }
+        public int WorkExp { get; set; }
+
         public double Salary { get; set; }
 
         public Doctor() : base()
@@ -17,6 +18,7 @@ namespace FinalTask
             WorkExp = 6;
             Salary = 6430.58;
         }
+
         public Doctor(string name, string surname, int age, Gender gender, int workExp, double salary) : base(name, surname, age, gender)
         {
             WorkExp = workExp;
@@ -36,9 +38,9 @@ namespace FinalTask
                 }
                 List<string> lines = lines = File.ReadAllLines(path).ToList();
                 int lineNum = 0;
-                if (fileType == FileType.xml)
+                if (fileType == FileType.xml) //.xml files must be processed separately
                 {
-                    using (XmlReader reader = XmlReader.Create(path))
+                    using (XmlReader reader = XmlReader.Create(path)) //processing .txt and .json
                     {
                         while (reader.ReadToFollowing("Doctor"))
                         {
@@ -81,7 +83,7 @@ namespace FinalTask
                         }
                         catch (JsonException ex)
                         {
-                            Console.WriteLine($"{ex.Message}Fix the file text and try again.");
+                            Console.WriteLine($"Format exception in .json file on line {ex.LineNumber + 1}: {ex.InnerException.Message}");
                             Program._log.Info(ex.Message);
                         }
                         catch (FormatException ex)
@@ -134,7 +136,7 @@ namespace FinalTask
             return doctor;
         }
 
-        protected virtual Doctor ReadFromJson(string line)// where T : Doctor
+        protected virtual Doctor ReadFromJson(string line)
         {
             Doctor? doctor = null;
             if (line.Contains("OperationsCount"))

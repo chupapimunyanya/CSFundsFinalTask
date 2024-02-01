@@ -3,7 +3,7 @@ using FinalTask;
 namespace FinalTaskTest
 {
     [TestClass]
-    public class FinalProjectUnitTests
+    public class FinalTaskUnitTests
     {
         [TestMethod]
         public void ReadFromTxtFileTest()
@@ -55,8 +55,8 @@ namespace FinalTaskTest
         {
             StringWriter sw = new();
             Console.SetOut(sw);
-            string expected = $"The JSON value could not be converted to System.Int32. Path: $.PatientsCount | LineNumber: 0 | BytePositionInLine: 19." +
-                              $"Fix the file text and try again.{Environment.NewLine}Total doctors added: 1{Environment.NewLine}";
+            string expected = $"Format exception in .json file on line 1: Cannot get the value of a token type 'String' as a number." +
+                              $"{Environment.NewLine}Total doctors added: 1{Environment.NewLine}";
             Doctor.ReadFromFile(new List<Doctor>(), "doctorsErrorTest.json");
             Assert.AreEqual(expected, sw.ToString());
         }

@@ -7,10 +7,12 @@ namespace FinalTask
     public class Surgeon : Doctor
     {
         public int OperationsCount { get; set; }
+
         public Surgeon() : base()
         {
             OperationsCount = 1001;
         }
+
         public Surgeon(string name, string surname, int age, Gender gender, int workExp, double salary, int operationsCount) : base(name, surname, age, gender, workExp, salary)
         {
             OperationsCount = operationsCount;
