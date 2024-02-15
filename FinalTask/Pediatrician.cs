@@ -11,19 +11,23 @@ namespace FinalTask
 
         private int _patientsCount;
 
-        public int PatientsCount {
+        public int PatientsCount
+        {
             get => _patientsCount;
             set
             {
-                if (value >= 0 && value <= Age * 365)
-                {
-                    _patientsCount = value;
-                }
-                else
-                {
-                    throw new ArgumentException($"Invalid value of patients count.\nValid range for this person: [0..{Age * 365}].");
-                }
+                this.SetPatientsCount(value);
             }
+        }
+
+        private void SetPatientsCount(int value)
+        {
+            if (value >= 0 && value <= Age * 365)
+            {
+                _patientsCount = value;
+                return;
+            }
+            throw new ArgumentException($"Invalid value of patients count.\nValid range for this person: [0..{Age * 365}].");
         }
 
         public Pediatrician() : base()

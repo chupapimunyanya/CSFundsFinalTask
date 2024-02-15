@@ -16,16 +16,20 @@ namespace FinalTask
             get => _proceduresCount;
             set
             {
-                if(value>=0 && value <= Age * 365)
-                {
-                    _proceduresCount = value;
-                }
-                else
-                {
-                    throw new ArgumentException($"Invalid value of procedures count.\nValid range for this person: [0..{Age * 365}].");
-                }
+                this.SetProceduresCount(value);
             }
         }
+
+        private void SetProceduresCount(int value)
+        {
+            if (value >= 0 && value <= Age * 365)
+            {
+                _proceduresCount = value;
+                return;
+            }
+                throw new ArgumentException($"Invalid value of procedures count.\nValid range for this person: [0..{Age * 365}].");
+        }
+
         public Cardiologist() : base()
         {
             _proceduresCount = 2500;

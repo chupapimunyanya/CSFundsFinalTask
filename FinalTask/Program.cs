@@ -65,7 +65,7 @@ namespace FinalTask
                             break;
 
                         case StartMenu.Work:
-                            if (ProgramUtils.CheckIfListIsEmpty(doctors))
+                            if (ProgramUtils.CheckIfListIsNotEmpty(doctors))
                             {
                                 ProgramUtils.Work(doctors);
                             }
@@ -73,9 +73,19 @@ namespace FinalTask
                             break;
 
                         case StartMenu.PrintAll:
-                            if (ProgramUtils.CheckIfListIsEmpty(doctors))
+                            if (ProgramUtils.CheckIfListIsNotEmpty(doctors))
                             {
                                 ProgramUtils.PrintAllDoctors(doctors);
+                            }
+                            ProgramUtils.IsNeededToClear();
+                            break;
+
+                        case StartMenu.SolveTask:
+                            if (ProgramUtils.CheckIfListIsNotEmpty(doctors))
+                            {
+                                ProgramUtils.WriteRes1(doctors);
+                                Console.WriteLine();
+                                ProgramUtils.WriteRes2(doctors);
                             }
                             ProgramUtils.IsNeededToClear();
                             break;
@@ -83,7 +93,7 @@ namespace FinalTask
                         case StartMenu.WriteToFile:
                             try
                             {
-                                if (ProgramUtils.CheckIfListIsEmpty(doctors))
+                                if (ProgramUtils.CheckIfListIsNotEmpty(doctors))
                                 {
                                     DoctorWorkWithFile.WriteToFile(doctors, ProgramUtils.GetFileName());
                                 }
@@ -99,7 +109,7 @@ namespace FinalTask
                         case StartMenu.RemoveDoctorByID:
                             try
                             {
-                                if (ProgramUtils.CheckIfListIsEmpty(doctors))
+                                if (ProgramUtils.CheckIfListIsNotEmpty(doctors))
                                 {
                                     doctors = ProgramUtils.RemoveDoctorById(doctors);
                                 }

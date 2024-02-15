@@ -20,15 +20,18 @@ namespace FinalTask
             get => _workExp;
             set
             {
-                if(value <= Age-12 && value >= 0)
-                {
-                    _workExp = value;
-                }
-                else
-                {
-                    throw new ArgumentException($"Invalid value of work experiance.\nValid range for this person: [0..{Age-12}].");
-                }
+                this.SetWorkExp(value);
             }
+        }
+
+        private void SetWorkExp(int value)
+        {
+            if (value <= Age - 12 && value >= 0)
+            {
+                _workExp = value;
+                return;
+            }
+                throw new ArgumentException($"Invalid value of work experiance.\nValid range for this person: [0..{Age - 12}].");
         }
 
         private double _salary;
@@ -39,15 +42,18 @@ namespace FinalTask
             get => _salary;
             set
             {
-                if(value>100 && value <= 25000)
-                {
-                    _salary = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid value of salary.\nValid range: [100..25000].");
-                }
+                this.SetSalary(value);
             }
+        }
+
+        private void SetSalary(double value)
+        {
+            if (value > 100 && value <= 25000)
+            {
+                _salary = value;
+                return;
+            }
+                throw new ArgumentException("Invalid value of salary.\nValid range: [100..25000].");
         }
 
         public Doctor() : base()

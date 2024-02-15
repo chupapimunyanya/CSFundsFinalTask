@@ -1,11 +1,4 @@
 ﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using static FinalTask.Neurologist;
 
 namespace FinalTask
@@ -45,13 +38,6 @@ namespace FinalTask
             }
             DoctorWorkWithFile.WriteToTxtFile(res, "result2.txt");
             Console.WriteLine($"Total number of pediatricians with over 1000 patients is {count}.");
-        }
-
-        internal static void BlockLine()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n--------------\n");
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         internal static string GetFileName()
@@ -200,7 +186,7 @@ namespace FinalTask
             }
         }
 
-        internal static bool CheckIfListIsEmpty(List<Doctor> doctors)
+        internal static bool CheckIfListIsNotEmpty(List<Doctor> doctors)
         {
             if (doctors.Count == 0)
             {
@@ -221,7 +207,7 @@ namespace FinalTask
             StartMenu item;
             do
             {
-                Console.Write("1 - Add doctor(s)\n2 - Work\n3 - Print all doctors\n4 - Write doctors to .txt/.json/.xml file\n5 - Remove doctor by id\n0 - Exit\n\nChoose option: ");
+                Console.Write("1 - Add doctor(s)\n2 - Work\n3 - Print all doctors\n4 - Solve the task\n5 - Write doctors to .txt/.json/.xml file\n6 - Remove doctor by id\n0 - Exit\n\nChoose option: ");
             } while (!(StartMenu.TryParse(Console.ReadLine(), out item) && Enum.IsDefined(typeof(StartMenu), item)));
             return item;
         }
@@ -237,6 +223,6 @@ namespace FinalTask
         }
     }
 
-    enum StartMenu { AddDoctors = 1, Work, PrintAll, WriteToFile, RemoveDoctorByID, Exit = 0 };
+    enum StartMenu { AddDoctors = 1, Work, PrintAll, SolveTask, WriteToFile, RemoveDoctorByID, Exit = 0 };
     enum AddDoctorsMenu { ReadFromFile = 1, AddManually, Exit = 0 };
 }

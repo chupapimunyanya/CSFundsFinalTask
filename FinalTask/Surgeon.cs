@@ -14,15 +14,18 @@ namespace FinalTask
             get => _operationsCount;
             set
             {
-                if (value >= 0 && value <= Age * 365)
-                {
-                    _operationsCount = value;
-                }
-                else
-                {
-                    throw new ArgumentException($"Invalid value of operations count.\nValid range for this person: [0..{Age * 365}].");
-                }
+                this.SetOperationsCount(value);
             }
+        }
+
+        private void SetOperationsCount(int value)
+        {
+            if (value >= 0 && value <= Age * 365)
+            {
+                _operationsCount = value;
+                return;
+            }
+                throw new ArgumentException($"Invalid value of operations count.\nValid range for this person: [0..{Age * 365}].");
         }
 
         public Surgeon() : base()

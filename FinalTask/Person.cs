@@ -11,15 +11,18 @@ namespace FinalTask
             get => _name;
             set
             {
-                if (Regex.IsMatch(value, @"^[A-Z][a-z]{1,}$"))
-                {
-                    _name = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Wrong Name format.");
-                }
+                this.SetName(value);
             }
+        }
+
+        private void SetName(string value)
+        {
+            if (Regex.IsMatch(value, @"^[A-Z][a-z]{1,}$"))
+            {
+                _name = value;
+                return;
+            }
+            throw new ArgumentException("Wrong Name format.");
         }
 
         private string _surname;
@@ -29,15 +32,18 @@ namespace FinalTask
             get => _surname;
             set
             {
-                if (Regex.IsMatch(value, @"^[A-Z][a-z]{1,}$"))
-                {
-                    _surname = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Wrong surname format.");
-                }
+                this.SetSurname(value);
             }
+        }
+
+        private void SetSurname(string value)
+        {
+            if (Regex.IsMatch(value, @"^[A-Z][a-z]{1,}$"))
+            {
+                _surname = value;
+                return;
+            }
+            throw new ArgumentException("Wrong surname format.");
         }
 
         private int _age;
@@ -47,15 +53,18 @@ namespace FinalTask
             get => _age;
             set
             {
-                if (value >= 20 && value <= 92)
-                {
-                    _age = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid value for age.\nPerson is too young or too old to be a doctor.");
-                }
+                this.SetAge(value);
             }
+        }
+
+        private void SetAge(int value)
+        {
+            if (value >= 20 && value <= 92)
+            {
+                _age = value;
+                return;
+            }
+            throw new ArgumentException("Invalid value for age.\nPerson is too young or too old to be a doctor.");
         }
 
         public Gender Gender { get; set; }
