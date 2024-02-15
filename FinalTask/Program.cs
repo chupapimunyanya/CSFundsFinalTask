@@ -27,7 +27,6 @@ namespace FinalTask
 
                             do
                             {
-                                //Console.Clear();
                                 addDoctorsMenuItem = ProgramUtils.AddDoctorsMenuFunc();
                                 Console.Clear();
                                 try
@@ -93,7 +92,6 @@ namespace FinalTask
                             {
                                 Console.WriteLine(ex.Message);
                                 ProgramUtils._log.Info(ex.Message);
-                                //ProgramUtils.IsNeededToClear();
                             }
                             ProgramUtils.IsNeededToClear();
                             break;
@@ -110,7 +108,6 @@ namespace FinalTask
                             {
                                 Console.WriteLine(ex.Message);
                                 ProgramUtils._log.Info(ex.Message);
-                                //ProgramUtils.IsNeededToClear();
                             }
                             ProgramUtils.IsNeededToClear();
                             break;

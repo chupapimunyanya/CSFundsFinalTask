@@ -132,7 +132,6 @@ namespace FinalTask
         private static Neurologist AddNeurologistDetails(Doctor doctor)
         {
             Console.Write("Input Neurologist's specialty area (Practical/Research/Teaching): ");
-            //Enum.TryParse(Console.ReadLine(), out SpecialtyArea specialtyArea);
             SpecialtyArea specialtyArea = (SpecialtyArea)Enum.Parse(typeof(SpecialtyArea), Console.ReadLine());
             Neurologist neurologist = new Neurologist();
             CopyCommonDoctorProperties(doctor, neurologist);
