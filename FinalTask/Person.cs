@@ -1,22 +1,73 @@
-﻿namespace FinalTask
+﻿using System.Text.RegularExpressions;
+
+namespace FinalTask
 {
     public class Person
     {
-        public string Name { get; set; }
+        private string _name;
 
-        public string Surname { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (Regex.IsMatch(value, @"^[A-Z][a-z]{1,}$"))
+                {
+                    _name = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Wrong Name format.");
+                }
+            }
+        }
 
-        public int Age { get; }
+        private string _surname;
 
-        public Gender Gender { get; }
+        public string Surname
+        {
+            get => _surname;
+            set
+            {
+                if (Regex.IsMatch(value, @"^[A-Z][a-z]{1,}$"))
+                {
+                    _surname = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Wrong surname format.");
+                }
+            }
+        }
+
+        private int _age;
+
+        public int Age
+        {
+            get => _age;
+            set
+            {
+                if (value >= 20 && value <= 92)
+                {
+                    _age = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid value for age.\nPerson is too young or too old to be a doctor.");
+                }
+            }
+        }
+
+        public Gender Gender { get; set; }
 
         public Person()
         {
-            Name = string.Empty;
-            Surname = string.Empty;
-            Age = 32;
+            _name = string.Empty;
+            _surname = string.Empty;
+            _age = 0;
             Gender = Gender.Male;
         }
+
 
         public Person(string name, string surname, int age, Gender gender)
         {
@@ -26,10 +77,15 @@
             Gender = gender;
         }
 
+        public virtual new string ToString()
+        {
+            return $"Person: {_name}, {_age}, {Gender}";
+        }
+
         public virtual new bool Equals(object? o)
         {
             Person? item = o as Person;
-            if (item!=null && Name.Equals(item.Name) && Surname.Equals(item.Surname) && Age == item.Age && Gender == item.Gender)
+            if (item != null && _name.Equals(item.Name) && _surname.Equals(item.Surname) && _age == item.Age && Gender == item.Gender)
             {
                 return true;
             }

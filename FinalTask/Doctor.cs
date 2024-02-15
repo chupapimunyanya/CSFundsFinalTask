@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -7,16 +8,53 @@ namespace FinalTask
     [Serializable]
     [XmlInclude(typeof(Surgeon))]
     [XmlInclude(typeof(Pediatrician))]
+    [XmlInclude(typeof(Neurologist))]
+    [XmlInclude(typeof(Cardiologist))]
     public class Doctor : Person
     {
-        public int WorkExp { get; set; }
 
-        public double Salary { get; set; }
+        private int _workExp;
+
+        [JsonPropertyName("WorkExp")]
+        public int WorkExp
+        {
+            get => _workExp;
+            set
+            {
+                if(value <= Age-12 && value >= 0)
+                {
+                    _workExp = value;
+                }
+                else
+                {
+                    throw new ArgumentException($"Invalid value of work experiance.\nValid range for this person: [0..{Age-12}].");
+                }
+            }
+        }
+
+        private double _salary;
+
+        [JsonPropertyName("Salary")]
+        public double Salary
+        {
+            get => _salary;
+            set
+            {
+                if(value>100 && value <= 25000)
+                {
+                    _salary = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid value of salary.\nValid range: [100..25000].");
+                }
+            }
+        }
 
         public Doctor() : base()
         {
-            WorkExp = 6;
-            Salary = 6430.58;
+            _workExp = 6;
+            _salary = 6430.58;
         }
 
         public Doctor(string name, string surname, int age, Gender gender, int workExp, double salary) : base(name, surname, age, gender)
@@ -25,212 +63,27 @@ namespace FinalTask
             Salary = salary;
         }
 
-        //TODO: Think on adding some methods/functionality as 'operations' or 'examine the patient'
 
-        public static List<T> ReadFromFile<T>(List<T> doctors, string path) where T : Doctor, new()
+        public virtual void Work()
         {
-            int startCount = doctors.Count;
-            try
-            {
-                if (!Enum.TryParse(Path.GetExtension(path)?.TrimStart('.'), out FileType fileType))
-                {
-                    throw new ArgumentException($"Wrong file type is given as argument in Doctor.ReadFromFile(arg1, arg2).");
-                }
-                List<string> lines = lines = File.ReadAllLines(path).ToList();
-                int lineNum = 0;
-                if (fileType == FileType.xml) //.xml files must be processed separately
-                {
-                    using (XmlReader reader = XmlReader.Create(path)) //processing .txt and .json
-                    {
-                        while (reader.ReadToFollowing("Doctor"))
-                        {
-                            try
-                            {
-                                T d = new();
-                                doctors.Add((T)ReadFromXml(reader));
-                            }
-                            catch (FormatException ex)
-                            {
-                                Console.WriteLine($"Format exception in .xml file: {ex.Message}");
-                                ProgramUtils._log.Info(ex.Message);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.Message);
-                                ProgramUtils._log.Info(ex.Message);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (string line in lines)
-                    {
-                        lineNum++;
-                        try
-                        {
-                            T d = new();
-                            if (null != line)
-                            {
-                                switch (fileType)
-                                {
-                                    case FileType.txt:
-                                        doctors.Add((T)d.ReadFromTxt(line));
-                                        break;
-                                    case FileType.json:
-                                        doctors.Add((T)d.ReadFromJson(line));
-                                        break;
-                                }
-                            }
-                        }
-                        catch (JsonException ex)
-                        {
-                            Console.WriteLine($"Format exception in .json file on line {ex.LineNumber + 1}: {ex.InnerException.Message}");
-                            ProgramUtils._log.Info(ex.Message);
-                        }
-                        catch (FormatException ex)
-                        {
-                            Console.WriteLine($"Format exception on line {lineNum}: {ex.Message}");
-                            ProgramUtils._log.Info($"Format exception in .txt file on line {lineNum}: {ex.Message}");
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                            ProgramUtils._log.Info(ex.Message);
-                        }
-                    }
-                }
-                Console.WriteLine($"Total doctors added: {doctors.Count - startCount}");
-            }
-            catch (ArgumentException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                ProgramUtils._log.Info(ex.Message);
-            }
-            return doctors;
-        }
-        protected virtual Doctor ReadFromTxt(string line)
-        {
-            Doctor? doctor = null;
-            if (line.Contains("Surgeon: "))
-            {
-                Surgeon s = new();
-                doctor = s.ReadFromTxt(line);
-            }
-            else if (line.Contains("Pediatrician: "))
-            {
-                Pediatrician p = new();
-                doctor = p.ReadFromTxt(line);
-            }
-            else
-            {
-                throw new FormatException("File should contain doctor`s specialty.");
-            }
+            Random random = new Random();
+            Console.WriteLine(random.Next(100) > 90 ? "Good result." : "Bad result.");
+        } 
 
-            if (null == doctor)
-            {
-                throw new FormatException("Check your file format.");
-            }
-            return doctor;
+        public override string ToString()
+        {
+            return $"Doctor: {Name}, {Age}, {Gender}, {_workExp}, {_salary}";
         }
 
-        protected virtual Doctor ReadFromJson(string line)
+        internal virtual string WriteToJson()
         {
-            Doctor? doctor = null;
-            if (line.Contains("OperationsCount"))
-            {
-                doctor = JsonSerializer.Deserialize<Surgeon>(line);
-            }
-            else if (line.Contains("PatientsCount"))
-            {
-                doctor = JsonSerializer.Deserialize<Pediatrician>(line);
-            }
-            else
-            {
-                doctor = JsonSerializer.Deserialize<Doctor>(line);
-            }
-            if (null == doctor)
-            {
-                throw new Exception($"Failed to read from .json.");
-            }
-            return doctor;
-        }
-
-        public static void WriteToTxtFile(List<Doctor> doctors, string path)
-        {
-            if (Path.GetExtension(path)?.TrimStart('.') != FileType.txt.ToString())
-            {
-                throw new ArgumentException($"Wrong file type is given as argument in Doctor.WriteToTxtFile(arg1, arg2).");
-            }
-            using (StreamWriter sw = new(path))
-            {
-                foreach (Doctor d in doctors)
-                {
-                    sw.WriteLine(d.ToString());
-                }
-            }
-            Console.WriteLine($"Check out the .txt file at: {Path.GetFullPath(path)}.");
-        }
-
-        public static void WriteToJsonFile<T>(List<T> doctors, string path) where T : Doctor, new()
-        {
-            if (Path.GetExtension(path)?.TrimStart('.') != FileType.json.ToString())
-            {
-                throw new ArgumentException($"Wrong file type is given as argument in Doctor.WriteToJsonFile(arg1, arg2).");
-            }
-            string jsonstring = "";
-            foreach (Doctor d in doctors)
-            {
-                jsonstring += d.WriteToJson() + "\n";
-            }
-            File.WriteAllText(path, jsonstring);
-            Console.WriteLine($"Check out the .json file at: {Path.GetFullPath(path)}.");
-        }
-
-        protected virtual string WriteToJson()
-        {
-            return JsonSerializer.Serialize<Doctor>(this);
-        }
-
-        public static void WriteToXmlFile<T>(List<T> doctors, string path) where T : Doctor, new()
-        {
-            if (Path.GetExtension(path)?.TrimStart('.') != FileType.xml.ToString())
-            {
-                throw new ArgumentException($"Wrong file type is given as argument in Doctor.WriteToXmlFile(arg1, arg2).");
-            }
-            XmlSerializer serializer = new(typeof(List<Doctor>));
-            using (StreamWriter sr = new(path))
-            {
-                serializer.Serialize(sr, doctors);
-            }
-            Console.WriteLine($"Check out the .xml file at: {Path.GetFullPath(path)}.");
-        }
-
-        protected static Doctor ReadFromXml(XmlReader reader)
-        {
-            Doctor? doctor = null;
-            XmlSerializer serializer = new(typeof(Doctor), new Type[] { typeof(Surgeon), typeof(Pediatrician) });
-            doctor = (Doctor)serializer.Deserialize(reader);
-            if (null == doctor)
-            {
-                throw new FormatException();
-            }
-            return doctor;
-        }
-
-        public virtual new string ToString()
-        {
-            return $"Doctor: {Name}, {Age}, {Gender}, {WorkExp}, {Salary}";
+            return JsonSerializer.Serialize(this);
         }
 
         public override bool Equals(object? o)
         {
             Doctor? item = o as Doctor;
-            if (base.Equals(item) && WorkExp == item.WorkExp && Salary == item.Salary)
+            if (base.Equals(item) && _workExp == item.WorkExp && _salary == item.Salary)
             {
                 return true;
             }
@@ -242,5 +95,5 @@ namespace FinalTask
             return base.GetHashCode();
         }
     }
-    public enum FileType { txt = 0, json, xml }
+    enum DoctorSpecialty { Pediatrician = 0, Surgeon, Neurologist, Cardiologist };
 }

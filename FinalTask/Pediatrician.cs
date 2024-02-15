@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace FinalTask
@@ -6,19 +7,37 @@ namespace FinalTask
     [Serializable]
     public class Pediatrician : Doctor
     {
-        public int PatientsCount { get; set; }
+        [JsonPropertyName("PatientsCount")]
+
+        private int _patientsCount;
+
+        public int PatientsCount {
+            get => _patientsCount;
+            set
+            {
+                if (value >= 0 && value <= Age * 365)
+                {
+                    _patientsCount = value;
+                }
+                else
+                {
+                    throw new ArgumentException($"Invalid value of patients count.\nValid range for this person: [0..{Age * 365}].");
+                }
+            }
+        }
 
         public Pediatrician() : base()
         {
-            PatientsCount = 49;
-        }   
+            _patientsCount = 49;
+        }
 
+        [JsonConstructor]
         public Pediatrician(string name, string surname, int age, Gender gender, int workExp, double salary, int patientsCount) : base(name, surname, age, gender, workExp, salary)
         {
             PatientsCount = patientsCount;
         }
 
-        protected override Pediatrician? ReadFromTxt(string line)
+        internal Pediatrician? ReadFromTxt(string line)
         {
             string pattern = @"Pediatrician: (\w+) (\w+), (\d+), (\w+), (\d+), (\d+\.\d+), (\d+)";
             Match match = Regex.Match(line, pattern);
@@ -36,14 +55,20 @@ namespace FinalTask
             return null;
         }
 
-        protected override string WriteToJson()
+        internal string WriteToJson()
         {
             return JsonSerializer.Serialize(this);
         }
 
+        public override void Work()
+        {
+            Random random = new Random();
+            Console.WriteLine(random.Next(100) > 90 ? "Can not diagnose the disease. Poor patient :(" : "Disease diagnosed. Patient will be fine :)");
+        }
+
         public override string ToString()
         {
-            return $"Pediatrician: {Name} {Surname}, {Age}, {Gender}, {WorkExp}, {Salary}, {PatientsCount}";
+            return $"Pediatrician: {Name} {Surname}, {Age}, {Gender}, {WorkExp}, {Salary}, {_patientsCount}";
         }
 
         public override bool Equals(object? o)
